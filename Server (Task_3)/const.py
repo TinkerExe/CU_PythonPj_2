@@ -1,3 +1,0 @@
-APIKEY = 'aBUOcKwszt0cLCk40H11zwIPWT32ATaa'
-APIKEY_2 = 'elJu1EONip2qWHZ9XBSKFkccbYRhcDdy' # На всякий
-APIKEY_3 = 'cTr4efNjQKOeARHIdXtEN9A8HTDgw1Am' # ))

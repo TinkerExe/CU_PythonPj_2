@@ -1,2 +1,1 @@
 APIKEY = 'Ваш apikey'
-

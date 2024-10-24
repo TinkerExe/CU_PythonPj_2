@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Проверка погоды</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+
+        h1 {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 50%;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            margin: 10px 0 5px;
+        }
+
+        input[type="text"] {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        input[type="text"].blue-input {
+            background-color: rgba(173, 216, 230, 0.3);
+            border: 2px solid #0000FF;
+        }
+
+        input[type="text"].red-input {
+            background-color: rgba(255, 192, 203, 0.3);
+            border: 2px solid #FF0000;
+        }
+
+        select {
+            margin: 10px 0;
+            padding: 10px;
+            width: 100%;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .result {
+            margin-top: 20px;
+        }
+
+        .form-section {
+            display: none;
+        }
+
+        /* Стили для отображения ошибок */
+        .error {
+            position: fixed;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #f44336; /* Красный фон для ошибок */
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <h1>Погода по маршруту</h1>
+    <div class="container">
+        <form method="POST">
+            <label for="input_type">Выберите способ ввода:</label>
+            <select id="input_type" name="input_type" onchange="toggleInputType(this.value)">
+                <option value="city" {% if input_type == 'city' %}selected{% endif %}>По названию города</option>
+                <option value="coordinates" {% if input_type == 'coordinates' %}selected{% endif %}>По координатам</option>
+            </select>
+
+            <!-- Ввод для городов -->
+            <div id="city-inputs" class="form-section" {% if input_type == 'city' %}style="display: block;"{% endif %}>
+                <label for="start_city">Начальная точка (город):</label>
+                <input type="text" id="start_city" name="start_city" class="blue-input" value="{{ start_city or '' }}" placeholder="Введите название начального города">
+
+                <label for="end_city">Конечная точка (город):</label>
+                <input type="text" id="end_city" name="end_city" class="red-input" value="{{ end_city or '' }}" placeholder="Введите название конечного города">
+            </div>
+
+            <!-- Ввод для координат -->
+            <div id="coordinate-inputs" class="form-section" {% if input_type == 'coordinates' %}style="display: block;"{% endif %}>
+                <label for="start_lat">Начальная точка (широта):</label>
+                <input type="text" id="start_lat" name="start_lat" class="blue-input" value="{{ start_lat or '' }}" placeholder="Введите широту начальной точки">
+
+                <label for="start_lon">Начальная точка (долгота):</label>
+                <input type="text" id="start_lon" name="start_lon" class="blue-input" value="{{ start_lon or '' }}" placeholder="Введите долготу начальной точки">
+
+                <label for="end_lat">Конечная точка (широта):</label>
+                <input type="text" id="end_lat" name="end_lat" class="red-input" value="{{ end_lat or '' }}" placeholder="Введите широту конечной точки">
+
+                <label for="end_lon">Конечная точка (долгота):</label>
+                <input type="text" id="end_lon" name="end_lon" class="red-input" value="{{ end_lon or '' }}" placeholder="Введите долготу конечной точки">
+            </div>
+
+            <button type="submit">Проверить погоду</button>
+        </form>
+
+        <div class="result">
+            {% if error %}
+            <div class="error" id="error-message">
+                <strong>Ошибка:</strong> {{ error }}
+            </div>
+            {% endif %}
+            
+            {% if weather_start and weather_end %}
+            <h2>Результаты погоды:</h2>
+            <h3>Начальная точка:</h3>
+            <p>{{ weather_start }}</p>
+
+            <h3>Конечная точка:</h3>
+            <p>{{ weather_end }}</p>
+
+            <h3>Резюме:</h3>
+            <p>{{ res }}</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <script>
+        function toggleInputType(inputType) {
+            const cityInputs = document.getElementById('city-inputs');
+            const coordinateInputs = document.getElementById('coordinate-inputs');
+
+            if (inputType === 'city') {
+                cityInputs.style.display = 'block';
+                coordinateInputs.style.display = 'none';
+            } else if (inputType === 'coordinates') {
+                cityInputs.style.display = 'none';
+                coordinateInputs.style.display = 'block';
+            }
+        }
+
+        // Инициализация переключателя при загрузке
+        window.onload = function() {
+            const selectedType = document.getElementById('input_type').value;
+            toggleInputType(selectedType);
+        };
+    </script>
+</body>
+</html>
