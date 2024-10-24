@@ -38,9 +38,12 @@ def get_and_check(city_key_start, city_key_end):
     data_city_end = get_weather_data(city_key_end)
 
     if "error" in data_city_start or "error" in data_city_end:
-        return {"error": "Не удалось получить данные для одного из городов"}
+        return {"error": "Не удалось получить данные от Api-сервера"}
 
-    res = check_bad_weather(data_city_start) * check_bad_weather(data_city_end)
+    if check_bad_weather(data_city_start) * check_bad_weather(data_city_end) == 1:
+        res = "Ого, погода супер!"
+    else:
+        res = "Сегодня погодка не очень."
 
     return {
         "weather_start": data_city_start,

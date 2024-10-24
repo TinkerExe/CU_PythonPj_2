@@ -124,24 +124,71 @@
         </form>
 
         <div class="result">
+
             {% if error %}
             <div class="error" id="error-message">
                 <strong>Ошибка:</strong> {{ error }}
             </div>
             {% endif %}
-            
+
             {% if weather_start and weather_end %}
             <h2>Результаты погоды:</h2>
-            <h3>Начальная точка:</h3>
-            <p>{{ weather_start }}</p>
 
-            <h3>Конечная точка:</h3>
-            <p>{{ weather_end }}</p>
+            <!-- Погода для начальной точки -->
+            <h2 class="section-title">Погода в начальной точке</h2>
+            <table>
+                <tr>
+                    <th>Параметр</th>
+                    <th>Значение</th>
+                </tr>
+                <tr>
+                    <td>Температура (°C)</td>
+                    <td>{{ weather_start['Temperature_C'] }}</td>
+                </tr>
+                <tr>
+                    <td>Влажность (%)</td>
+                    <td>{{ weather_start['Humidity'] }}</td>
+                </tr>
+                <tr>
+                    <td>Скорость ветра (км/ч)</td>
+                    <td>{{ weather_start['Wind_Speed_kmh'] }}</td>
+                </tr>
+                <tr>
+                    <td>Вероятность дождя (%)</td>
+                    <td>{{ weather_start['Rain_Probability'] }}</td>
+                </tr>
+            </table>
 
-            <h3>Резюме:</h3>
-            <p>{{ res }}</p>
+            <!-- Погода для конечной точки -->
+            <h2 class="section-title">Погода в конечной точке</h2>
+            <table>
+                <tr>
+                    <th>Параметр</th>
+                    <th>Значение</th>
+                </tr>
+                <tr>
+                    <td>Температура (°C)</td>
+                    <td>{{ weather_end['Temperature_C'] }}</td>
+                </tr>
+                <tr>
+                    <td>Влажность (%)</td>
+                    <td>{{ weather_end['Humidity'] }}</td>
+                </tr>
+                <tr>
+                    <td>Скорость ветра (км/ч)</td>
+                    <td>{{ weather_end['Wind_Speed_kmh'] }}</td>
+                </tr>
+                <tr>
+                    <td>Вероятность дождя (%)</td>
+                    <td>{{ weather_end['Rain_Probability'] }}</td>
+                </tr>
+            </table>
+
+            <h3>Общий результат: {% if res == 1 %}Погода хорошая{% else %}Погода плохая{% endif %}</h3>
             {% endif %}
         </div>
+        
+        
     </div>
 
     <script>

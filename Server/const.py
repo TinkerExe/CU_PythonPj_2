@@ -1,1 +1,1 @@
-APIKEY = 'Ваш apikey'
+APIKEY = 'Ваш Api-key'

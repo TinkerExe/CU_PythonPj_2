@@ -9,11 +9,11 @@ def get_for_coordinates(lat, lon):
         'apikey': APIKEY
     }
     response = requests.get(url, params=params)
+    data = json.loads(response.text)
     if response.status_code == 200:
-
-        data = json.loads(response.text)
         return data['Key']
-    
+    else:
+        return "err"
 def get_for_name(name):
     url = 'http://dataservice.accuweather.com/locations/v1/cities/search'
     params = {
@@ -21,7 +21,8 @@ def get_for_name(name):
         'apikey': APIKEY
     }
     response = requests.get(url, params=params)
+    data = json.loads(response.text)
     if response.status_code == 200:
-
-        data = json.loads(response.text)
         return data[0]['Key']
+    else:
+        return "err"
